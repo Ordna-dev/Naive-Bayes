@@ -1,6 +1,9 @@
 import pandas, tkinter, random
 from tkinter import filedialog
 
+import pandas, tkinter, random
+from tkinter import filedialog
+
 def main(): #Funcion que se encarga de leer el archivo csv y ejecuta las funciones de ZeroR y OneR
 
     notCatchedData = True
@@ -26,16 +29,23 @@ def main(): #Funcion que se encarga de leer el archivo csv y ejecuta las funcion
     data = read.head(50) if filename else None #Leer maximo 50 instancias
 
     if data is not None:
-        train, test = divideData(data) #Se asignan las instancias a los conjuntos de entrenamiento y prueba
-        #class_attribute = random.choice(data.columns)
-        print("\nConjunto de entrenamiento:\n")
-        print(test)
-        #testing(test, class_attribute)
-        print("\nConjunto de prueba:\n")
-        print(train)
-        #testing(train, class_attribute)
+        test, train = divideData(data) #Se asignan las instancias a los conjuntos de entrenamiento y prueba
 
-        #Aca van a llamar las funciones de zeroR y oneR
+        print("\nConjunto de entrenamiento:\n")
+        print(train)
+
+        print("\nConjunto de prueba:\n")
+        print(test)
+
+        class_attribute = input("Introduce el nombre del atributo clase: ")
+
+        print("\nTabla de frencuencias en el conjunto de entrenamiento:")
+        tables(train, class_attribute)
+
+        print("\nTabla de frecuencias en el conjunto de prueba:")
+        tables(test, class_attribute)
+
+        #Aca se va a llamar la función tables()
 
 
 def divideData(data):
@@ -60,10 +70,28 @@ def testing(data, class_attribute): #Función puramente para pruebas, pueden tom
 
     print(f"\nRecuentos para el atributo clase {class_attribute}:\n{counts_string}")
 
-def zeroR(): #Parte de Esparza
+def tables(data, class_attribute): #Tabla de frecuencias y verosimilitud
+    # Iteracion sobre cada columna
+    for column in data.columns:
+        
+        # Se crea la tabla de frecuencias
+        frequency_table = data.groupby([column, class_attribute]).size()
 
-    return 0
+        # Se imprime el nombr del atributo
+        print(f"\nAtributo: {column}.")
 
-def oneR(): #Parte de Isaac
+        # Iteracion sobre cada valor unico en la columna
+        for value in data[column].unique():
+            # Imprimir conteos para vada valor de la clase atributo
+            
+            counts = []
+            for class_value in data[class_attribute].unique():
+                count = frequency_table.get((value, class_value), 0)
+                counts.append(f"{class_value}: {count}")
+
+            print(f"Valor: {value}. {', '.join(counts)}.")
+
+
+def naiveBayes(): #Algoritmo de Naive Bayes
 
     return 0
